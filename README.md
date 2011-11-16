@@ -1,9 +1,16 @@
 # JSON Processing implementation
 
-This library is simply a fork of the original JSON for Java library written by Douglas Crockford for easy use inside Processing IDE. See the original README below.
+This library is simply a fork of the original JSON for [Java library written by Douglas Crockford](https://github.com/douglascrockford/JSON-java) for easy use inside Processing IDE. See the original README below.
+
+# Installation in Processing
+
+1. Download the [zip-file](#)
+2. Extract the [zip-file](#) into your /sketchbook/libraries/ folder.
+3. Restart Processing IDE
 
 # Getting started with JSON in Processing.
 
+**Creating a JSONObject with primitive members**
 ``` java
 /**
  * Creating a JSONObject with primitive members
@@ -21,6 +28,7 @@ catch(JSONException e) {
 println( obj );
 ```
 
+**Creating a JSONObject with complex members**
 ``` java
 /**
  * Creating a JSONObject with complex members
@@ -53,6 +61,7 @@ catch(JSONException e) {
 println( obj );
 ```
 
+**Creating a JSONObject from a json-formatted String.**
 ``` java
 /**
  * Creating a JSONObject from a json-formatted String.
@@ -68,6 +77,7 @@ catch(Exception e) {
 
 ```
 
+**Creating a JSONArray of primitives**
 ``` java
 /**
  * Creating a JSONArray of primitives
@@ -84,6 +94,7 @@ catch(JSONException e) {
 println(arr);
 ```
 
+**Creating a JSONArray of objects**
 ``` java
 /**
  * Creating a JSONArray of objects
