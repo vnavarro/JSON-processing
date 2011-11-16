@@ -11,6 +11,7 @@ This library is simply a fork of the original JSON for [Java library written by 
 # Getting started with JSON in Processing.
 
 **Creating a JSONObject with primitive members**
+
 ``` java
 /**
  * Creating a JSONObject with primitive members
@@ -29,6 +30,7 @@ println( obj );
 ```
 
 **Creating a JSONObject with complex members**
+
 ``` java
 /**
  * Creating a JSONObject with complex members
@@ -62,6 +64,7 @@ println( obj );
 ```
 
 **Creating a JSONObject from a json-formatted String.**
+
 ``` java
 /**
  * Creating a JSONObject from a json-formatted String.
@@ -78,6 +81,7 @@ catch(Exception e) {
 ```
 
 **Creating a JSONArray of primitives**
+
 ``` java
 /**
  * Creating a JSONArray of primitives
@@ -95,6 +99,7 @@ println(arr);
 ```
 
 **Creating a JSONArray of objects**
+
 ``` java
 /**
  * Creating a JSONArray of objects
