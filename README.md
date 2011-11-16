@@ -4,8 +4,8 @@ This library is simply a fork of the original JSON for [Java library written by 
 
 # Installation in Processing
 
-1. Download the [zip-file](#)
-2. Extract the [zip-file](#) into your /sketchbook/libraries/ folder.
+1. Download the [zip-file](https://github.com/downloads/agoransson/JSON-processing/json4processing-0.1.1.zip)
+2. Extract the [zip-file](https://github.com/downloads/agoransson/JSON-processing/json4processing-0.1.1.zip) into your /sketchbook/libraries/ folder.
 3. Restart Processing IDE
 
 # Getting started with JSON in Processing.
