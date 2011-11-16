@@ -1,3 +1,127 @@
+# JSON Processing implementation
+
+This library is simply a fork of the original JSON for Java library written by Douglas Crockford for easy use inside Processing IDE. See the original README below.
+
+# Getting started with JSON in Processing.
+
+``` java
+/**
+ * Creating a JSONObject with primitive members
+ */
+
+JSONObject obj = new JSONObject();
+try {
+  obj.put("myint", 5);
+  obj.put("myfloat", 5.5);
+}
+catch(JSONException e) {
+  e.printStackTrace();
+}
+
+println( obj );
+```
+
+``` java
+/**
+ * Creating a JSONObject with complex members
+ */
+JSONObject myfirstmember = new JSONObject();
+try {
+  myfirstmember.put("myint", 5);
+}
+catch(JSONException e) {
+  e.printStackTrace();
+}
+
+JSONObject mysecondmember = new JSONObject();
+try {
+  mysecondmember.put("myfloat", 5.5);
+}
+catch(JSONException e) {
+  e.printStackTrace();
+}
+
+JSONObject obj = new JSONObject();
+try {
+  obj.put("myobj", myfirstmember);
+  obj.put("myobj2", mysecondmember);
+}
+catch(JSONException e) {
+  e.printStackTrace();
+}
+
+println( obj );
+```
+
+``` java
+/**
+ * Creating a JSONObject from a json-formatted String.
+ */
+String json_formatted_string = "{\"myint\":5,\"myfloat\":5.5}";
+try {
+  JSONObject obj = new JSONObject(json_formatted_string);
+  println( obj );
+}
+catch(Exception e) {
+  e.printStackTrace();
+}
+
+```
+
+``` java
+/**
+ * Creating a JSONArray of primitives
+ */
+JSONArray arr = new JSONArray();
+try {
+  arr.put(5);
+  arr.put(5.5);
+  arr.put('a');
+}
+catch(JSONException e) {
+  e.printStackTrace();
+}
+println(arr);
+```
+
+``` java
+/**
+ * Creating a JSONArray of objects
+ */
+JSONObject first = new JSONObject();
+try {
+  first.put("val", 5);
+}
+catch(JSONException e) {
+  e.printStackTrace();
+}
+
+JSONObject sec = new JSONObject();
+try {
+  sec.put("val", 5.5);
+}
+catch(JSONException e) {
+  e.printStackTrace();
+}
+
+JSONObject third = new JSONObject();
+try {
+  third.put("val", 'a');
+}
+catch(JSONException e) {
+  e.printStackTrace();
+}
+
+JSONArray arr = new JSONArray();
+arr.put(first);
+arr.put(sec);
+arr.put(third);
+
+println(arr);
+```
+
+# Original README
+
 JSON in Java [package org.json]
 
 Douglas Crockford
