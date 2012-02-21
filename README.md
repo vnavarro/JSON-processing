@@ -18,13 +18,8 @@ This library is simply a fork of the original JSON for [Java library written by 
  */
 
 JSONObject obj = new JSONObject();
-try {
-  obj.put("myint", 5);
-  obj.put("myfloat", 5.5);
-}
-catch(JSONException e) {
-  e.printStackTrace();
-}
+obj.put("myint", 5);
+obj.put("myfloat", 5.5);
 
 println( obj );
 ```
@@ -36,29 +31,14 @@ println( obj );
  * Creating a JSONObject with complex members
  */
 JSONObject myfirstmember = new JSONObject();
-try {
-  myfirstmember.put("myint", 5);
-}
-catch(JSONException e) {
-  e.printStackTrace();
-}
+myfirstmember.put("myint", 5);
 
 JSONObject mysecondmember = new JSONObject();
-try {
-  mysecondmember.put("myfloat", 5.5);
-}
-catch(JSONException e) {
-  e.printStackTrace();
-}
+mysecondmember.put("myfloat", 5.5);
 
 JSONObject obj = new JSONObject();
-try {
-  obj.put("myobj", myfirstmember);
-  obj.put("myobj2", mysecondmember);
-}
-catch(JSONException e) {
-  e.printStackTrace();
-}
+obj.put("myobj", myfirstmember);
+obj.put("myobj2", mysecondmember);
 
 println( obj );
 ```
@@ -70,14 +50,8 @@ println( obj );
  * Creating a JSONObject from a json-formatted String.
  */
 String json_formatted_string = "{\"myint\":5,\"myfloat\":5.5}";
-try {
-  JSONObject obj = new JSONObject(json_formatted_string);
-  println( obj );
-}
-catch(Exception e) {
-  e.printStackTrace();
-}
-
+JSONObject obj = new JSONObject(json_formatted_string);
+println( obj );
 ```
 
 **Creating a JSONArray of primitives**
@@ -87,14 +61,10 @@ catch(Exception e) {
  * Creating a JSONArray of primitives
  */
 JSONArray arr = new JSONArray();
-try {
-  arr.put(5);
-  arr.put(5.5);
-  arr.put('a');
-}
-catch(JSONException e) {
-  e.printStackTrace();
-}
+arr.put(5);
+arr.put(5.5);
+arr.put('a');
+
 println(arr);
 ```
 
@@ -105,28 +75,13 @@ println(arr);
  * Creating a JSONArray of objects
  */
 JSONObject first = new JSONObject();
-try {
-  first.put("val", 5);
-}
-catch(JSONException e) {
-  e.printStackTrace();
-}
+first.put("val", 5);
 
 JSONObject sec = new JSONObject();
-try {
-  sec.put("val", 5.5);
-}
-catch(JSONException e) {
-  e.printStackTrace();
-}
+sec.put("val", 5.5);
 
 JSONObject third = new JSONObject();
-try {
-  third.put("val", 'a');
-}
-catch(JSONException e) {
-  e.printStackTrace();
-}
+third.put("val", 'a');
 
 JSONArray arr = new JSONArray();
 arr.put(first);
