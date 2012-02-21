@@ -14,7 +14,7 @@ void setup(){
   
   // 2. Add some content to the object
   myJsonObject.put( "myIntegerValue", 7 );
-  
+
   println( myJsonObject );
 }
 
