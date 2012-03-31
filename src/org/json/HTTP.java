@@ -68,38 +68,45 @@ public class HTTP {
      * of the XML string.
      * @throws JSONException
      */
-    public static JSONObject toJSONObject(String string) throws JSONException {
+    public static JSONObject toJSONObject(String string) /*throws JSONException*/ {
         JSONObject     jo = new JSONObject();
         HTTPTokener    x = new HTTPTokener(string);
-        String         token;
+        String         token = null;
 
-        token = x.nextToken();
-        if (token.toUpperCase().startsWith("HTTP")) {
-
-// Response
-
-            jo.put("HTTP-Version", token);
-            jo.put("Status-Code", x.nextToken());
-            jo.put("Reason-Phrase", x.nextTo('\0'));
-            x.next();
-
-        } else {
-
-// Request
-
-            jo.put("Method", token);
-            jo.put("Request-URI", x.nextToken());
-            jo.put("HTTP-Version", x.nextToken());
-        }
-
-// Fields
-
-        while (x.more()) {
-            String name = x.nextTo(':');
-            x.next(':');
-            jo.put(name, x.nextTo('\0'));
-            x.next();
-        }
+        try {
+					token = x.nextToken();
+	        
+	        if (token != null && token.toUpperCase().startsWith("HTTP")) {
+	
+	// Response
+	
+	            jo.put("HTTP-Version", token);
+	            jo.put("Status-Code", x.nextToken());
+	            jo.put("Reason-Phrase", x.nextTo('\0'));
+	            x.next();
+	
+	        } else {
+	
+	// Request
+	
+	            jo.put("Method", token);
+	            jo.put("Request-URI", x.nextToken());
+	            jo.put("HTTP-Version", x.nextToken());
+	        }
+	
+	// Fields
+	
+	        while (x.more()) {
+	            String name = x.nextTo(':');
+	            x.next(':');
+	            jo.put(name, x.nextTo('\0'));
+	            x.next();
+	        }
+        
+				} catch (JSONException e) {
+					e.printStackTrace();
+				}
+        
         return jo;
     }
 
@@ -124,7 +131,7 @@ public class HTTP {
      * @throws JSONException if the object does not contain enough
      *  information.
      */
-    public static String toString(JSONObject jo) throws JSONException {
+    public static String toString(JSONObject jo) /*throws JSONException*/ {
         Iterator     keys = jo.keys();
         String       string;
         StringBuffer sb = new StringBuffer();
@@ -143,14 +150,18 @@ public class HTTP {
             sb.append(' ');
             sb.append(jo.getString("HTTP-Version"));
         } else {
-            throw new JSONException("Not enough material for an HTTP header.");
+           // throw new JSONException("Not enough material for an HTTP header.");
         }
         sb.append(CRLF);
         while (keys.hasNext()) {
             string = keys.next().toString();
-            if (!string.equals("HTTP-Version")      && !string.equals("Status-Code") &&
-                    !string.equals("Reason-Phrase") && !string.equals("Method") &&
-                    !string.equals("Request-URI")   && !jo.isNull(string)) {
+			if (!"HTTP-Version".equals(string) && !"Status-Code".equals(string) &&
+					!"Reason-Phrase".equals(string) && !"Method".equals(string) &&
+					!"Request-URI".equals(string) && !jo.isNull(string)) {
+				// if (!string.equals("HTTP-Version") && !string.equals("Status-Code")
+				// &&
+				// !string.equals("Reason-Phrase") && !string.equals("Method") &&
+				// !string.equals("Request-URI") && !jo.isNull(string)) {
                 sb.append(string);
                 sb.append(": ");
                 sb.append(jo.getString(string));
