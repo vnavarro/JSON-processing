@@ -285,13 +285,24 @@ public class JSONArray {
      * @throws JSONException If there is no value for the index or if the
      * value is not a JSONObject
      */
-    public JSONObject getJSONObject(int index) throws JSONException {
-        Object object = get(index);
+    public JSONObject getJSONObject(int index) /*throws JSONException*/ {
+        Object object = null;
+		try {
+			object = get(index);
+		} catch (JSONException e) {
+//			e.printStackTrace();
+			System.out.println( "JSONArray[" + index + "] is not a JSONObject." );
+		}
+		
+		if( object == null )
+			return null;
+		
         if (object instanceof JSONObject) {
             return (JSONObject)object;
         }
-        throw new JSONException("JSONArray[" + index +
-            "] is not a JSONObject.");
+//        throw new JSONException("JSONArray[" + index +
+//            "] is not a JSONObject.");
+		return null;
     }
 
 
