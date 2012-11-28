@@ -187,10 +187,11 @@ public class JSONArray {
      * @return An object value.
      * @throws JSONException If there is no value for the index.
      */
-    public Object get(int index) throws JSONException {
+    public Object get(int index) /*throws JSONException*/ {
         Object object = opt(index);
         if (object == null) {
-            throw new JSONException("JSONArray[" + index + "] not found.");
+            //throw new JSONException("JSONArray[" + index + "] not found.");
+        	System.out.println("JSONArray[" + index + "] not found.");
         }
         return object;
     }
@@ -287,12 +288,12 @@ public class JSONArray {
      */
     public JSONObject getJSONObject(int index) /*throws JSONException*/ {
         Object object = null;
-		try {
+//		try {
 			object = get(index);
-		} catch (JSONException e) {
+//		} catch (JSONException e) {
 //			e.printStackTrace();
-			System.out.println( "JSONArray[" + index + "] is not a JSONObject." );
-		}
+//			System.out.println( "JSONArray[" + index + "] is not a JSONObject." );
+//		}
 		
 		if( object == null )
 			return null;
