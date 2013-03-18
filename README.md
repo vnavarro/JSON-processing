@@ -2,6 +2,10 @@
 
 This library is simply a fork of the original JSON for [Java library written by Douglas Crockford](https://github.com/douglascrockford/JSON-java) for easy use inside Processing IDE. See the original README below.
 
+# Since Processing 2.0 beta 8
+
+Since the beta release (8) of Processing 2.0 (February 24) JSON is part of the core libraries; the combination of this contributed library and the core library will cause the "type is ambiguous" error, basically meaning that Processing doesnt know which of the libraries to use. The simplest way to combat this is to delete the json4processing library.
+
 # Installation in Processing
 
 1. Download the latest version [here](https://github.com/agoransson/JSON-processing/downloads)
