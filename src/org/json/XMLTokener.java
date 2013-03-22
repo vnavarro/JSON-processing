@@ -60,14 +60,14 @@ public class XMLTokener extends JSONTokener {
      * @return The string up to the <code>]]&gt;</code>.
      * @throws JSONException If the <code>]]&gt;</code> is not found.
      */
-    public String nextCDATA() throws JSONException {
+    public String nextCDATA() /*throws JSONException*/ {
         char         c;
         int          i;
         StringBuffer sb = new StringBuffer();
         for (;;) {
             c = next();
             if (end()) {
-                throw syntaxError("Unclosed CDATA");
+//                throw syntaxError("Unclosed CDATA");
             }
             sb.append(c);
             i = sb.length() - 3;
@@ -89,7 +89,7 @@ public class XMLTokener extends JSONTokener {
      * source text.
      * @throws JSONException
      */
-    public Object nextContent() throws JSONException {
+    public Object nextContent() /*throws JSONException*/ {
         char         c;
         StringBuffer sb;
         do {
@@ -124,7 +124,7 @@ public class XMLTokener extends JSONTokener {
      * @return  A Character or an entity String if the entity is not recognized.
      * @throws JSONException If missing ';' in XML entity.
      */
-    public Object nextEntity(char ampersand) throws JSONException {
+    public Object nextEntity(char ampersand) /*throws JSONException*/ {
         StringBuffer sb = new StringBuffer();
         for (;;) {
             char c = next();
@@ -133,7 +133,7 @@ public class XMLTokener extends JSONTokener {
             } else if (c == ';') {
                 break;
             } else {
-                throw syntaxError("Missing ';' in XML entity: &" + sb);
+//                throw syntaxError("Missing ';' in XML entity: &" + sb);
             }
         }
         String string = sb.toString();
@@ -151,7 +151,7 @@ public class XMLTokener extends JSONTokener {
      * @throws JSONException If a string is not properly closed or if the XML
      *  is badly structured.
      */
-    public Object nextMeta() throws JSONException {
+    public Object nextMeta() /*throws JSONException*/ {
         char c;
         char q;
         do {
@@ -159,7 +159,7 @@ public class XMLTokener extends JSONTokener {
         } while (Character.isWhitespace(c));
         switch (c) {
         case 0:
-            throw syntaxError("Misshaped meta tag");
+//            throw syntaxError("Misshaped meta tag");
         case '<':
             return XML.LT;
         case '>':
@@ -178,7 +178,7 @@ public class XMLTokener extends JSONTokener {
             for (;;) {
                 c = next();
                 if (c == 0) {
-                    throw syntaxError("Unterminated string");
+//                    throw syntaxError("Unterminated string");
                 }
                 if (c == q) {
                     return Boolean.TRUE;
@@ -216,7 +216,7 @@ public class XMLTokener extends JSONTokener {
      * @return a String or a Character.
      * @throws JSONException If the XML is not well formed.
      */
-    public Object nextToken() throws JSONException {
+    public Object nextToken() /*throws JSONException*/ {
         char c;
         char q;
         StringBuffer sb;
@@ -225,9 +225,9 @@ public class XMLTokener extends JSONTokener {
         } while (Character.isWhitespace(c));
         switch (c) {
         case 0:
-            throw syntaxError("Misshaped element");
+//            throw syntaxError("Misshaped element");
         case '<':
-            throw syntaxError("Misplaced '<'");
+//            throw syntaxError("Misplaced '<'");
         case '>':
             return XML.GT;
         case '/':
@@ -248,7 +248,7 @@ public class XMLTokener extends JSONTokener {
             for (;;) {
                 c = next();
                 if (c == 0) {
-                    throw syntaxError("Unterminated string");
+//                    throw syntaxError("Unterminated string");
                 }
                 if (c == q) {
                     return sb.toString();
@@ -285,7 +285,7 @@ public class XMLTokener extends JSONTokener {
                 case '<':
                 case '"':
                 case '\'':
-                    throw syntaxError("Bad character in a name");
+//                    throw syntaxError("Bad character in a name");
                 }
             }
         }
@@ -298,7 +298,7 @@ public class XMLTokener extends JSONTokener {
      * @param to A string to skip past.
      * @throws JSONException
      */
-    public boolean skipPast(String to) throws JSONException {
+    public boolean skipPast(String to) /*throws JSONException*/ {
     	boolean b;
     	char c;
     	int i;

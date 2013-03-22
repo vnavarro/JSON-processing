@@ -58,7 +58,7 @@ public class HTTPTokener extends JSONTokener {
             for (;;) {
                 c = next();
                 if (c < ' ') {
-                    throw syntaxError("Unterminated string.");
+//                    throw syntaxError("Unterminated string.");
                 }
                 if (c == q) {
                     return sb.toString();

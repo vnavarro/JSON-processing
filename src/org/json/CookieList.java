@@ -46,8 +46,8 @@ public class CookieList {
      * @return A JSONObject
      * @throws JSONException
      */
-    public static JSONObject toJSONObject(String string) throws JSONException {
-        JSONObject jo = new JSONObject();
+    public static JSONObj toJSONObject(String string) throws JSONException {
+        JSONObj jo = new JSONObj();
         JSONTokener x = new JSONTokener(string);
         while (x.more()) {
             String name = Cookie.unescape(x.nextTo('='));
@@ -68,7 +68,7 @@ public class CookieList {
      * @return A cookie list string
      * @throws JSONException
      */
-    public static String toString(JSONObject jo) throws JSONException {
+    public static String toString(JSONObj jo) throws JSONException {
         boolean      b = false;
         Iterator     keys = jo.keys();
         String       string;
