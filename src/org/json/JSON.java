@@ -82,7 +82,14 @@ public class JSON {
 		}
 	}
 
-
+	
+	public static JSON createObject(){
+		return new JSONObject();
+	}
+	
+	public static JSON createArray(){
+		return new JSONArray();
+	}
 
 	/**
 	 * Open a json file
