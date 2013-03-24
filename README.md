@@ -8,9 +8,11 @@ Since the beta release (8) of Processing 2.0 (February 24) JSON is part of the c
 
 # Installation in Processing
 
-1. Download the latest version [here](https://github.com/agoransson/JSON-processing/downloads)
+1. Download the latest version [here](santiclaws.se/json4processing/json4processing-0.1.6.zip)
 2. Extract the zip-file into your /sketchbook/libraries/ folder.
 3. Restart Processing IDE
+
+You can still find the OLD versions [here](https://github.com/agoransson/JSON-processing/downloads)
 
 # Getting started with JSON in Processing.
 
