@@ -10,11 +10,11 @@ import org.json.*;
 void setup(){
   
   // 1. Initialize the Array
-  JSONArray myJsonArray = new JSONArray();
+  JSON myJsonArray = JSON.createArray();
   
   // 2. Add some content to the array
-  myJsonArray.put( 4 );
-  myJsonArray.put( 2 );
+  myJsonArray.append( 4 );
+  myJsonArray.append( 2 );
   
   println( myJsonArray ); 
 }

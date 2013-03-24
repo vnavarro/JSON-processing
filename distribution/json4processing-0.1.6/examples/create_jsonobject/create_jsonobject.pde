@@ -10,10 +10,10 @@ import org.json.*;
 void setup(){
   
   // 1. Initialize the object
-  JSONObject myJsonObject = new JSONObject();
+  JSON myJsonObject = JSON.createObject();
   
   // 2. Add some content to the object
-  myJsonObject.put( "myIntegerValue", 7 );
+  myJsonObject.setInt( "myIntegerValue", 7 );
 
   println( myJsonObject );
 }

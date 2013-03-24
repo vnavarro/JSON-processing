@@ -11,7 +11,7 @@ void setup(){
   String jsonstring = "{\"myIntegerValue\":7}";
   
   // 2. Initialize the object
-  JSONObject myJsonObject = new JSONObject(jsonstring);
+  JSON myJsonObject = JSON.parse(jsonstring);
 
   println( myJsonObject );
 }
