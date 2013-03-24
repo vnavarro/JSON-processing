@@ -361,11 +361,11 @@ public class JSONTokener {
     case '\'':
       return this.nextString(c);
     case '{':
-//      this.back();
-//      return new JSONObject(this);
+      this.back();
+      return new JSONObject(this);
     case '[':
       this.back();
-      return new JSON(this);/*Array(this);*/
+      return new JSONArray(this);
     }
 
     /*

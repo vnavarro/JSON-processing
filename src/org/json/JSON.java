@@ -40,10 +40,10 @@ public class JSON {
 		OBJECT, ARRAY, NULL
 	};
 	
-	protected JSONType type;
+	public JSONType type;
 	
-	private static JSONObject obj;
-	private static JSONArray arr;
+	public JSONObject obj;
+	public JSONArray arr;
 	
 	protected JSON(){
 		// Empty, used for inner classes
@@ -55,8 +55,34 @@ public class JSON {
 	 * @param tokener
 	 */
 	public JSON(JSONTokener tokener) {
-		
+		if (tokener.nextClean() == '{') {
+			tokener.back();
+			try {
+				obj = new JSONObject(tokener);
+				this.type = JSONType.OBJECT;
+				return;
+			} catch (Exception e) {
+				e.printStackTrace();
+				throw new RuntimeException("Failed to create JSONObject");
+			}
+		} 
+		tokener.back();
+
+		if (tokener.nextClean() == '[') {
+			tokener.back();
+			try {
+				arr = new JSONArray(tokener);
+				this.type = JSONType.ARRAY;
+				return;
+			} catch (Exception e) {
+				throw new RuntimeException("Failed to create JSONArray");
+			}
+		}else{
+			throw new RuntimeException("Text is not JSON formatted");
+		}
 	}
+
+
 
 	/**
 	 * Open a json file
@@ -78,28 +104,28 @@ public class JSON {
 		if (tokener.nextClean() == '{') {
 			tokener.back();
 			try {
-				obj = new JSONObject(tokener);
-				obj.type = JSONType.OBJECT;
-				return obj;
+				//obj = new JSONObject(tokener);
+				//obj.type = JSONType.OBJECT;
+				return new JSON(tokener);
 			} catch (Exception e) {
 				e.printStackTrace();
 				throw new RuntimeException("Failed to create JSONObject");
 			}
 		} 
 		tokener.back();
-		
+
 		if (tokener.nextClean() == '[') {
 			tokener.back();
 			try {
-				arr = new JSONArray(tokener);
-				arr.type = JSONType.ARRAY;
-				return arr;
+				//arr = new JSONArray(tokener);
+				//arr.type = JSONType.ARRAY;
+				return new JSON(tokener);
 			} catch (Exception e) {
 				throw new RuntimeException("Failed to create JSONArray");
 			}
-		}else{
-			throw new RuntimeException("File is neither a JSONObject or a JSONArray");
 		}
+
+		throw new RuntimeException("File is not JSON formatted");
 	}
 	
 	// JSONObject and JSONArray classes below
@@ -221,6 +247,17 @@ public class JSON {
 			return arr.getInnerObject(index);
 		}
 	}
+	
+	@Override
+	public String toString() {
+		if( type == JSONType.OBJECT){
+			return obj.toString();
+		}else if (type == JSONType.ARRAY){
+			return arr.toString();
+		}else{
+			throw new RuntimeException("Not a JSON type");
+		}
+	}	
 	
 	/**
 	 * JSONObject.NULL is equivalent to the value that JavaScript calls null,
@@ -419,6 +456,9 @@ public class JSON {
 	   */
 	  public JSONObject() {
 	    this.map = new HashMap<String, Object>();
+	    
+	    type = JSONType.OBJECT;
+	    obj = this;
 	  }
 
 
@@ -2405,6 +2445,8 @@ public class JSON {
 	  public JSONArray() {
 	    super();
 		this.myArrayList = new ArrayList<Object>();
+		type = JSONType.ARRAY;
+		arr = this;
 	  }
 
 	  /**
