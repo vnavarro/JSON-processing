@@ -108,7 +108,8 @@ public class JSON {
 	
 		JSONTokener tokener = new JSONTokener(input);
 		
-		if (tokener.nextClean() == '{' || tokener.nextClean() == '[') {
+		char next = tokener.nextClean();
+		if (next == '{' || next == '[') {
 			tokener.back();
 			try {
 				return new JSON(tokener);
@@ -123,7 +124,8 @@ public class JSON {
 	public static JSON parse(String data){	
 		JSONTokener tokener = new JSONTokener(data);
 		
-		if (tokener.nextClean() == '{' || tokener.nextClean() == '[') {
+		char next = tokener.nextClean();
+		if (next == '{' || next == '[') {
 			tokener.back();
 			try {
 				return new JSON(tokener);
