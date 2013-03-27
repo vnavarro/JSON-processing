@@ -1,8 +1,6 @@
 /*
  * JSON 4 Processing
- * Basic example 2: Creating a JSON Array
- *
- * Good for sending a large set of primitive values, like sensor readings.
+ * Basic example 2: Creating a list of JSON values
  */
 
 import org.json.*;

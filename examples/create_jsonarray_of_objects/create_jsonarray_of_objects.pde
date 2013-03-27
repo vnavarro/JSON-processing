@@ -1,8 +1,6 @@
 /*
  * JSON 4 Processing
- * Basic example 3: Creating a JSON Array of JSON Objects.
- *
- * Good for sending multiple complex values, such as database tables.
+ * Basic example 3: Creating a list of JSON objects
  */
 
 import org.json.*;

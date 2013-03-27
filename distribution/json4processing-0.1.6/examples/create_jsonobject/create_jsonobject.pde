@@ -1,6 +1,6 @@
 /*
  * JSON 4 Processing
- * Basic example 1: Creating a JSON Object
+ * Basic example 1: Creating a JSON object
  *
  * Good for sending values that has a specific meaning (complex values)
  */

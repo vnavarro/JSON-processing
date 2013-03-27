@@ -1,6 +1,6 @@
 /*
  * JSON 4 Processing
- * Basic example 1: Creating a JSON Object from a json string
+ * Basic example 3: Parsing a JSON formatted string
  */
 
 import org.json.*;

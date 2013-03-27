@@ -36,14 +36,14 @@ public class JSON {
 	/*
 	 * Defines the type of object
 	 */
-	public enum JSONType {
+	protected enum JSONType {
 		OBJECT, ARRAY, NULL
 	};
 	
-	public JSONType type;
+	protected JSONType type;
 	
-	public JSONObject obj;
-	public JSONArray arr;
+	protected JSONObject obj;
+	protected JSONArray arr;
 	
 	protected JSON(){
 		// Empty, used for inner classes
@@ -54,25 +54,22 @@ public class JSON {
 	 * 
 	 * @param tokener
 	 */
-	public JSON(JSONTokener tokener) {
-		if (tokener.nextClean() == '{') {
-			tokener.back();
+	protected JSON(JSONTokener tokener) {
+		
+		char nextChar = tokener.nextClean();
+		tokener.back();
+		
+		if (nextChar == '{') {
 			try {
 				obj = new JSONObject(tokener);
-				this.type = JSONType.OBJECT;
 				return;
 			} catch (Exception e) {
 				e.printStackTrace();
 				throw new RuntimeException("Failed to create JSONObject");
 			}
-		} 
-		tokener.back();
-
-		if (tokener.nextClean() == '[') {
-			tokener.back();
+		}else if (nextChar == '[') {
 			try {
 				arr = new JSONArray(tokener);
-				this.type = JSONType.ARRAY;
 				return;
 			} catch (Exception e) {
 				throw new RuntimeException("Failed to create JSONArray");
@@ -109,8 +106,9 @@ public class JSON {
 		JSONTokener tokener = new JSONTokener(input);
 		
 		char next = tokener.nextClean();
+		tokener.back();
+		
 		if (next == '{' || next == '[') {
-			tokener.back();
 			try {
 				return new JSON(tokener);
 			} catch (Exception e) {
@@ -125,8 +123,10 @@ public class JSON {
 		JSONTokener tokener = new JSONTokener(data);
 		
 		char next = tokener.nextClean();
+		tokener.back();
+		
+		System.out.println(next);
 		if (next == '{' || next == '[') {
-			tokener.back();
 			try {
 				return new JSON(tokener);
 			} catch (Exception e) {
@@ -136,13 +136,8 @@ public class JSON {
 
 		throw new RuntimeException("File is not JSON formatted");
 	}
-	
-	// JSONObject and JSONArray classes below
-	
-	
-	// JSONObject methods
 
-	//String, Int, Long, Float, Double, Boolean, JSONArray, JSONObject
+	// JSONObject methods
 
 	public String getString(String key) {
 		if( type != JSONType.OBJECT ){
@@ -610,7 +605,7 @@ public class JSON {
 	  public JSONObject() {
 	    this.map = new HashMap<String, Object>();
 	    
-	    type = JSONType.OBJECT;
+	    this.type = JSONType.OBJECT;
 	    obj = this;
 	  }
 

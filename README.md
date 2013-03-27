@@ -4,11 +4,11 @@ This library is simply a fork of the original JSON for [Java library written by 
 
 # Since Processing 2.0 beta 8
 
-Since the beta release (8) of Processing 2.0 (February 24) JSON is part of the core libraries; the combination of this contributed library and the core library will cause the "type is ambiguous" error, basically meaning that Processing doesnt know which of the libraries to use. The simplest way to combat this is to delete the json4processing library.
+Since the beta release (8) of Processing 2.0 (February 24) JSON is part of the core libraries; to avoid any ambiguity problems you should upgrade to [version 0.1.6](http://santiclaws.se/json4processing/json4processing-0.1.6.zip) of this library.
 
 # Installation in Processing
 
-1. Download the latest version [here](santiclaws.se/json4processing/json4processing-0.1.6.zip)
+1. Download the latest version [here](http://santiclaws.se/json4processing/json4processing-0.1.6.zip)
 2. Extract the zip-file into your /sketchbook/libraries/ folder.
 3. Restart Processing IDE
 
