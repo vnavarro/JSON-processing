@@ -16,83 +16,83 @@ You can still find the OLD versions [here](https://github.com/agoransson/JSON-pr
 
 # Getting started with JSON in Processing.
 
-**Creating a JSONObject with primitive members**
+**Creating a JSON with primitive members**
 
 ``` java
 /**
- * Creating a JSONObject with primitive members
+ * Creating a JSON with primitive members
  */
 
-JSONObject obj = new JSONObject();
-obj.put("myint", 5);
-obj.put("myfloat", 5.5);
+JSON obj = JSON.createObject();
+obj.setInt("myint", 5);
+obj.setFloat("myfloat", 5.5);
 
 println( obj );
 ```
 
-**Creating a JSONObject with complex members**
+**Creating a JSON with complex members**
 
 ``` java
 /**
- * Creating a JSONObject with complex members
+ * Creating a JSON with complex members
  */
-JSONObject myfirstmember = new JSONObject();
-myfirstmember.put("myint", 5);
+JSON myfirstmember = JSON.createObject();
+myfirstmember.setInt("myint", 5);
 
-JSONObject mysecondmember = new JSONObject();
-mysecondmember.put("myfloat", 5.5);
+JSON mysecondmember = JSON.createObject();
+mysecondmember.setFloat("myfloat", 5.5);
 
-JSONObject obj = new JSONObject();
-obj.put("myobj", myfirstmember);
-obj.put("myobj2", mysecondmember);
+JSON obj = JSON.createObject();
+obj.setJSON("myobj", myfirstmember);
+obj.setJSON("myobj2", mysecondmember);
 
 println( obj );
 ```
 
-**Creating a JSONObject from a json-formatted String.**
+**Creating a JSON from a json-formatted String.**
 
 ``` java
 /**
- * Creating a JSONObject from a json-formatted String.
+ * Creating a JSON from a json-formatted String.
  */
 String json_formatted_string = "{\"myint\":5,\"myfloat\":5.5}";
-JSONObject obj = new JSONObject(json_formatted_string);
+JSON obj = JSON.parse(json_formatted_string);
 println( obj );
 ```
 
-**Creating a JSONArray of primitives**
+**Creating a JSON array of primitives**
 
 ``` java
 /**
- * Creating a JSONArray of primitives
+ * Creating a JSON array of primitives
  */
-JSONArray arr = new JSONArray();
-arr.put(5);
-arr.put(5.5);
-arr.put('a');
+JSON arr = JSON.createArray();
+arr.append(5);
+arr.append(5.5);
+arr.append('a');
 
 println(arr);
 ```
 
-**Creating a JSONArray of objects**
+**Creating a JSON array of objects**
 
 ``` java
 /**
- * Creating a JSONArray of objects
+ * Creating a JSON array of objects
  */
-JSONObject first = new JSONObject();
-first.put("val", 5);
+JSON first = JSON.createObject();
+first.setInt("val", 5);
 
-JSONObject sec = new JSONObject();
-sec.put("val", 5.5);
+JSON sec = JSON.createObject();
+sec.setFloat("val", 5.5);
 
-JSONObject third = new JSONObject();
-third.put("val", 'a');
+JSON third = JSON.createObject();
+third.setString("val", "a");
 
-JSONArray arr = new JSONArray();
-arr.put(first);
-arr.put(sec);
-arr.put(third);
+JSON arr = JSON.createArray();
+arr.append(first);
+arr.append(sec);
+arr.append(third);
 
 println(arr);
 ```
