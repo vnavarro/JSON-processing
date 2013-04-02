@@ -268,6 +268,14 @@ public class JSON {
 	}
 	
 	//JSONArray methods
+	public int length(){
+		if( type != JSONType.ARRAY ){
+		     throw new RuntimeException("Not a JSONArray");
+		}else{
+			return arr.size();
+		}
+	}
+	
 	public String getString(int index){
 		if( type != JSONType.ARRAY ){
 		     throw new RuntimeException("Not a JSONArray");
