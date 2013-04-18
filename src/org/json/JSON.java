@@ -49,6 +49,21 @@ public class JSON {
 		// Empty, used for inner classes
 	}
 	
+	protected JSON(Object array){
+		this();
+		if (array.getClass().isArray()) {
+			int length = Array.getLength(array);
+			for (int i = 0; i < length; i += 1) {
+				arr.innerAppend(JSONObject.wrap(Array.get(array, i)));
+			}
+		} else {
+			// throw new JSONException(
+			// "JSONArray initial value should be a string or collection or array.");
+			System.out
+					.println("JSONArray initial value should be a string or collection or array.");
+		}
+	}
+	
 	/**
 	 * Constructor for JSONTokeners.
 	 * 
@@ -83,6 +98,38 @@ public class JSON {
 
 	public JSONType getType(){
 		return type;
+	}
+	
+	public JSON accumulate( String key, Object value ) {
+		if( type == JSONType.OBJECT ){
+			return obj.accumulate(key, value );
+		}else{
+			throw new RuntimeException("Not a JSONObject");
+		}
+	}
+	
+	public JSON accumulate( Object value ) {
+		if( type == JSONType.ARRAY ){
+			return arr.accumulate( value );
+		}else{
+			throw new RuntimeException("Not a JSONArray");
+		}
+	}
+	
+	protected Object opt(String key) {
+		if( type == JSONType.OBJECT ) {
+			return obj.innerOpt(key);
+		} else {
+			throw new RuntimeException("Not a JSONObject, perhaps you meant opt(int)?");
+		}
+	}
+	
+	protected Object opt(int index) {
+		if( type == JSONType.ARRAY ) {
+			return arr.innerOpt(index);
+		} else {
+			throw new RuntimeException("Not a JSONArray, perhaps you meant opt(String)?");
+		}
 	}
 	
 	public static JSON createObject(){
@@ -140,12 +187,51 @@ public class JSON {
 
 		throw new RuntimeException("Text is not JSON formatted");
 	}
-
+	
+	protected Object get(String key){
+		if( type == JSONType.OBJECT )
+			return obj.innerGet(key);
+		else
+			throw new RuntimeException("Not a JSONObject, try using get(int)");
+	}
+	
+	protected Object get(int index){
+		if( type == JSONType.ARRAY )
+			return arr.get(index);
+		else
+			throw new RuntimeException("Not a JSONArray, try using get(String)");
+	}
+	
+	protected JSON put(String key, Object value){
+		if( type == JSONType.OBJECT )
+			return obj.innerPut(key, value);
+		else
+			throw new RuntimeException("Not a JSONObject, try using get(int)");
+	}
+	
+	public int length(){
+		if( type == JSONType.ARRAY ){
+		     return arr.size();
+		}else if (type == JSONType.OBJECT){
+			return obj.size();
+		}else{
+			throw new RuntimeException("Not a JSON Type.");
+		}
+	}
+	
 	// JSONObject methods
 
+	public Iterator keys() {
+		if( type != JSONType.OBJECT ){
+		     throw new RuntimeException("Not a JSONObject.");
+		}else{
+			return obj.keys();
+		}
+	}
+	
 	public String getString(String key) {
 		if( type != JSONType.OBJECT ){
-		     throw new RuntimeException("Not a JSONObject");
+		     throw new RuntimeException("Not a JSONObject, try using getString(int) instead.");
 		}else{
 			return obj.getInnerString(key);
 		}
@@ -153,7 +239,7 @@ public class JSON {
 	
 	public JSON setString(String key, String value){
 		if( type != JSONType.OBJECT ){
-		     throw new RuntimeException("Not a JSONObject");
+		     throw new RuntimeException("Not a JSONObject, try using append(String) instead.");
 		}else{
 			return obj.setInnerString(key, value);
 		}
@@ -161,7 +247,7 @@ public class JSON {
 	
 	public int getInt(String key) {
 		if( type != JSONType.OBJECT ){
-		     throw new RuntimeException("Not a JSONObject");
+		     throw new RuntimeException("Not a JSONObject, try using getInt(int) instead.");
 		}else{
 			return obj.getInnerInt(key);
 		}
@@ -169,7 +255,7 @@ public class JSON {
 
 	public JSON setInt(String key, int value){
 		if( type != JSONType.OBJECT ){
-		     throw new RuntimeException("Not a JSONObject");
+		     throw new RuntimeException("Not a JSONObject, try using append(int) instead.");
 		}else{
 			return obj.setInnerInt(key, value);
 		}
@@ -177,7 +263,7 @@ public class JSON {
 	
 	public float getFloat(String key) {
 		if( type != JSONType.OBJECT ){
-		     throw new RuntimeException("Not a JSONObject");
+		     throw new RuntimeException("Not a JSONObject, try using getFloat(int) instead.");
 		}else{
 			return obj.getInnerFloat(key);
 		}
@@ -185,7 +271,7 @@ public class JSON {
 	
 	public JSON setFloat(String key, float value){
 		if( type != JSONType.OBJECT ){
-		     throw new RuntimeException("Not a JSONObject");
+		     throw new RuntimeException("Not a JSONObject, try using append(float) instead.");
 		}else{
 			return obj.setInnerFloat(key, value);
 		}
@@ -193,7 +279,7 @@ public class JSON {
 	
 	public double getDouble(String key) {
 		if( type != JSONType.OBJECT ){
-		     throw new RuntimeException("Not a JSONObject");
+		     throw new RuntimeException("Not a JSONObject, try using getDouble(int) instead.");
 		}else{
 			return obj.getInnerDouble(key);
 		}
@@ -201,7 +287,7 @@ public class JSON {
 	
 	public JSON setDouble(String key, double value){
 		if( type != JSONType.OBJECT ){
-		     throw new RuntimeException("Not a JSONObject");
+		     throw new RuntimeException("Not a JSONObject, try using append(double) instead.");
 		}else{
 			return obj.setInnerDouble(key, value);
 		}
@@ -209,15 +295,15 @@ public class JSON {
 	
 	public boolean getBoolean(String key) {
 		if( type != JSONType.OBJECT ){
-		     throw new RuntimeException("Not a JSONObject");
+		     throw new RuntimeException("Not a JSONObject, try using getBoolean(int) instead.");
 		}else{
 			return obj.getInnerBoolean(key);
 		}
 	}
 	
-	public JSON setString(String key, boolean value){
+	public JSON setBoolean(String key, boolean value){
 		if( type != JSONType.OBJECT ){
-		     throw new RuntimeException("Not a JSONObject");
+		     throw new RuntimeException("Not a JSONObject, try using append(boolean) instead.");
 		}else{
 			return obj.setInnerBoolean(key, value);
 		}
@@ -225,7 +311,7 @@ public class JSON {
 	
 	public JSONObject getObject(String key) {
 		if( type != JSONType.OBJECT ){
-		     throw new RuntimeException("Not a JSONObject");
+		     throw new RuntimeException("Not a JSONObject, try using getObject(int) instead.");
 		}else{
 			return obj.getInnerJSONObject(key);
 		}
@@ -233,7 +319,7 @@ public class JSON {
 	
 	public JSON setObject(String key, JSONObject value){
 		if( type != JSONType.OBJECT ){
-		     throw new RuntimeException("Not a JSONObject");
+		     throw new RuntimeException("Not a JSONObject, try using append(JSONObject) instead.");
 		}else{
 			return obj.setInnerObject(key, value);
 		}
@@ -241,7 +327,7 @@ public class JSON {
 	
 	public JSONArray getArray(String key) {
 		if( type != JSONType.OBJECT ){
-		     throw new RuntimeException("Not a JSONObject");
+		     throw new RuntimeException("Not a JSONObject, try using getArray(int) instead.");
 		}else{
 			return obj.getInnerJSONArray(key);
 		}
@@ -249,7 +335,7 @@ public class JSON {
 	
 	public JSON setArray(String key, JSONArray value){
 		if( type != JSONType.OBJECT ){
-		     throw new RuntimeException("Not a JSONObject");
+		     throw new RuntimeException("Not a JSONObject, try using append(JSONArray) instead.");
 		}else{
 			return obj.setInnerArray(key, value);
 		}
@@ -257,7 +343,7 @@ public class JSON {
 	
 	public JSON getJSON(String key) {
 		if( type != JSONType.OBJECT ){
-		     throw new RuntimeException("Not a JSONObject");
+		     throw new RuntimeException("Not a JSONObject, try using getJSON(int) instead.");
 		}else{
 			return obj.getInnerJSON(key);
 		}
@@ -265,24 +351,17 @@ public class JSON {
 	
 	public JSON setJSON(String key, JSON value){
 		if( type != JSONType.OBJECT ){
-		     throw new RuntimeException("Not a JSONObject");
+		     throw new RuntimeException("Not a JSONObject, try using append(JSON) instead.");
 		}else{
 			return obj.setInnerJSON(key, value);
 		}
 	}
 	
 	//JSONArray methods
-	public int length(){
-		if( type != JSONType.ARRAY ){
-		     throw new RuntimeException("Not a JSONArray");
-		}else{
-			return arr.size();
-		}
-	}
 	
 	public String getString(int index){
 		if( type != JSONType.ARRAY ){
-		     throw new RuntimeException("Not a JSONArray");
+		     throw new RuntimeException("Not a JSONArray, try using getString(String) instead.");
 		}else{
 			return arr.getInnerString(index);
 		}
@@ -290,7 +369,7 @@ public class JSON {
 	
 	public JSON append(String value){
 		if( type != JSONType.ARRAY){
-		     throw new RuntimeException("Not a JSONArray");
+		     throw new RuntimeException("Not a JSONArray, try using setString(String, String) instead.");
 		} else {
 			return arr.innerAppend(value);
 		}
@@ -298,7 +377,7 @@ public class JSON {
 	
 	public int getInt(int index){
 		if( type != JSONType.ARRAY ){
-		     throw new RuntimeException("Not a JSONArray");
+		     throw new RuntimeException("Not a JSONArray, try using getInt(String) instead.");
 		}else{
 			return arr.getInnerInt(index);
 		}
@@ -306,7 +385,7 @@ public class JSON {
 	
 	public JSON append(int value){
 		if( type != JSONType.ARRAY){
-		     throw new RuntimeException("Not a JSONArray");
+		     throw new RuntimeException("Not a JSONArray, try using setInt(String, int) instead.");
 		} else {
 			return arr.innerAppend(value);
 		}
@@ -314,7 +393,7 @@ public class JSON {
 	
 	public float getFloat(int index){
 		if( type != JSONType.ARRAY ){
-		     throw new RuntimeException("Not a JSONArray");
+		     throw new RuntimeException("Not a JSONArray, try using getFloat(String) instead.");
 		}else{
 			return arr.getInnerFloat(index);
 		}
@@ -322,7 +401,7 @@ public class JSON {
 	
 	public JSON append(float value){
 		if( type != JSONType.ARRAY){
-		     throw new RuntimeException("Not a JSONArray");
+		     throw new RuntimeException("Not a JSONArray, try using setFloat(String, float) instead.");
 		} else {
 			return arr.innerAppend(value);
 		}
@@ -330,7 +409,7 @@ public class JSON {
 	
 	public double getDouble(int index){
 		if( type != JSONType.ARRAY ){
-		     throw new RuntimeException("Not a JSONArray");
+		     throw new RuntimeException("Not a JSONArray, try using getDouble(String) instead.");
 		}else{
 			return arr.getInnerDouble(index);
 		}
@@ -338,7 +417,7 @@ public class JSON {
 	
 	public JSON append(double value){
 		if( type != JSONType.ARRAY){
-		     throw new RuntimeException("Not a JSONArray");
+		     throw new RuntimeException("Not a JSONArray, try using setDouble(String, double) instead.");
 		} else {
 			return arr.innerAppend(value);
 		}
@@ -346,7 +425,7 @@ public class JSON {
 	
 	public boolean getBoolean(int index){
 		if( type != JSONType.ARRAY ){
-		     throw new RuntimeException("Not a JSONArray");
+		     throw new RuntimeException("Not a JSONArray, try using getBoolean(String) instead.");
 		}else{
 			return arr.getInnerBoolean(index);
 		}
@@ -354,7 +433,7 @@ public class JSON {
 	
 	public JSON append(boolean value){
 		if( type != JSONType.ARRAY){
-		     throw new RuntimeException("Not a JSONArray");
+		     throw new RuntimeException("Not a JSONArray, try using setBoolean(String, boolean) instead.");
 		} else {
 			return arr.innerAppend(value);
 		}
@@ -362,7 +441,7 @@ public class JSON {
 	
 	public JSONArray getArray(int index){
 		if( type != JSONType.ARRAY ){
-		     throw new RuntimeException("Not a JSONArray");
+		     throw new RuntimeException("Not a JSONArray, try using getArray(String) instead.");
 		}else{
 			return arr.getInnerArray(index);
 		}
@@ -370,7 +449,7 @@ public class JSON {
 	
 	public JSON append(JSONArray value){
 		if( type != JSONType.ARRAY){
-		     throw new RuntimeException("Not a JSONArray");
+		     throw new RuntimeException("Not a JSONArray, try using setArray(String, JSONArray) instead.");
 		} else {
 			return arr.innerAppend(value);
 		}
@@ -378,7 +457,7 @@ public class JSON {
 	
 	public JSONObject getObject(int index){
 		if( type != JSONType.ARRAY ){
-		     throw new RuntimeException("Not a JSONArray");
+		     throw new RuntimeException("Not a JSONArray, try using getObject(String) instead.");
 		}else{
 			return arr.getInnerObject(index);
 		}
@@ -386,7 +465,7 @@ public class JSON {
 	
 	public JSON append(JSONObject value){
 		if( type != JSONType.ARRAY){
-		     throw new RuntimeException("Not a JSONArray");
+		     throw new RuntimeException("Not a JSONArray, try using setObject(String, JSONObject) instead.");
 		} else {
 			return arr.innerAppend(value);
 		}
@@ -394,7 +473,7 @@ public class JSON {
 	
 	public JSON getJSON(int index){
 		if( type != JSONType.ARRAY ){
-		     throw new RuntimeException("Not a JSONArray");
+		     throw new RuntimeException("Not a JSONArray, try using getJSON(String) instead.");
 		}else{
 			return arr.getInnerJSON(index);
 		}
@@ -402,9 +481,17 @@ public class JSON {
 	
 	public JSON append(JSON value){
 		if( type != JSONType.ARRAY){
-		     throw new RuntimeException("Not a JSONArray");
+		     throw new RuntimeException("Not a JSONArray, try using setJSON(String, JSON) instead.");
 		} else {
 			return arr.innerAppend(value);
+		}
+	}
+	
+	protected JSON append(Object object){
+		if( type != JSONType.ARRAY){
+		     throw new RuntimeException("Not a JSONArray, try using setJSON(String, JSON) instead.");
+		} else {
+			return arr.innerAppend(object);
 		}
 	}
 	
@@ -415,7 +502,7 @@ public class JSON {
 		}else if (type == JSONType.ARRAY){
 			return arr.toString();
 		}else{
-			throw new RuntimeException("Not a JSON type");
+			throw new RuntimeException("Not an acceptable JSON type.");
 		}
 	}	
 	
@@ -824,39 +911,34 @@ public class JSON {
 	//  }
 
 
-	//  /**
-	//   * Accumulate values under a key. It is similar to the put method except
-	//   * that if there is already an object stored under the key then a
-	//   * JSONArray is stored under the key to hold all of the accumulated values.
-	//   * If there is already a JSONArray, then the new value is appended to it.
-	//   * In contrast, the put method replaces the previous value.
-	//   *
-	//   * If only one value is accumulated that is not a JSONArray, then the
-	//   * result will be the same as using put. But if multiple values are
-	//   * accumulated, then the result will be like append.
-	//   * @param key   A key string.
-	//   * @param value An object to be accumulated under the key.
-	//   * @return this.
-	//   * @throws JSONException If the value is an invalid number
-	//   *  or if the key is null.
-	//   */
-	//  public JSONObject accumulate(
-//	                               String key,
-//	                               Object value
-//	    ) throws JSONException {
-//	    testValidity(value);
-//	    Object object = this.opt(key);
-//	    if (object == null) {
-//	      this.put(key, value instanceof JSONArray
-//	               ? new JSONArray().put(value)
-//	                 : value);
-//	    } else if (object instanceof JSONArray) {
-//	      ((JSONArray)object).put(value);
-//	    } else {
-//	      this.put(key, new JSONArray().put(object).put(value));
-//	    }
-//	    return this;
-	//  }
+	  /**
+	   * Accumulate values under a key. It is similar to the put method except
+	   * that if there is already an object stored under the key then a
+	   * JSONArray is stored under the key to hold all of the accumulated values.
+	   * If there is already a JSONArray, then the new value is appended to it.
+	   * In contrast, the put method replaces the previous value.
+	   *
+	   * If only one value is accumulated that is not a JSONArray, then the
+	   * result will be the same as using put. But if multiple values are
+	   * accumulated, then the result will be like append.
+	   * @param key   A key string.
+	   * @param value An object to be accumulated under the key.
+	   * @return this.
+	   * @throws JSONException If the value is an invalid number
+	   *  or if the key is null.
+	   */
+	  public JSON/*Object*/ accumulate( String key, Object value ) /*throws JSONException*/ {
+	    testValidity(value);
+	    Object object = this.opt(key);
+	    if (object == null) {
+	      this.put(key, value instanceof JSONArray ? new JSONArray().innerAppend/*put*/(value) : value);
+	    } else if (object instanceof JSONArray) {
+	      ((JSONArray)object).innerAppend/*put*/(value);
+	    } else {
+	      this.put(key, new JSONArray().innerAppend/*put*/(object).innerAppend/*put*/(value));
+	    }
+	    return this;
+	  }
 
 
 	//  /**
@@ -919,11 +1001,11 @@ public class JSON {
 	   * @return      The object associated with the key.
 	   * @throws      JSONException if the key is not found.
 	   */
-	  private Object get(String key) {
+	  private Object innerGet(String key) {
 	    if (key == null) {
 	      throw new RuntimeException("Null key.");
 	    }
-	    Object object = this.opt(key);
+	    Object object = this.innerOpt(key);
 	    if (object == null) {
 	      throw new RuntimeException("JSONObject[" + quote(key) + "] not found.");
 	    }
@@ -939,7 +1021,7 @@ public class JSON {
 	   * @throws   JSONException if there is no string value for the key.
 	   */
 	  public String getInnerString(String key) {
-	    Object object = this.get(key);
+	    Object object = this.innerGet(key);
 	    if (object instanceof String) {
 	      return (String)object;
 	    }
@@ -956,7 +1038,7 @@ public class JSON {
 	   *  be converted to an integer.
 	   */
 	  public int getInnerInt(String key) {
-	    Object object = this.get(key);
+	    Object object = this.innerGet(key);
 	    try {
 	      return object instanceof Number
 	        ? ((Number)object).intValue()
@@ -976,7 +1058,7 @@ public class JSON {
 	   *  be converted to a long.
 	   */
 	  public long getInnerLong(String key) {
-	    Object object = this.get(key);
+	    Object object = this.innerGet(key);
 	    try {
 	      return object instanceof Number
 	        ? ((Number)object).longValue()
@@ -1000,7 +1082,7 @@ public class JSON {
 	   *  if the value is not a Number object and cannot be converted to a number.
 	   */
 	  public double getInnerDouble(String key) {
-	    Object object = this.get(key);
+	    Object object = this.innerGet(key);
 	    try {
 	      return object instanceof Number
 	        ? ((Number)object).doubleValue()
@@ -1020,7 +1102,7 @@ public class JSON {
 	   *  if the value is not a Boolean or the String "true" or "false".
 	   */
 	  public boolean getInnerBoolean(String key) {
-	    Object object = this.get(key);
+	    Object object = this.innerGet(key);
 	    if (object.equals(Boolean.FALSE) ||
 	      (object instanceof String &&
 	        ((String)object).equalsIgnoreCase("false"))) {
@@ -1043,7 +1125,7 @@ public class JSON {
 	   *  if the value is not a JSONArray.
 	   */
 	  public JSONArray getInnerJSONArray(String key) {
-	    Object object = this.get(key);
+	    Object object = this.innerGet(key);
 	    if (object instanceof JSONArray) {
 	      return (JSONArray)object;
 	    }
@@ -1060,7 +1142,7 @@ public class JSON {
 	   *  if the value is not a JSONObject.
 	   */
 	  public JSONObject getInnerJSONObject(String key) {
-	    Object object = this.get(key);
+	    Object object = this.innerGet(key);
 	    if (object instanceof JSONObject) {
 	      return (JSONObject)object;
 	    }
@@ -1069,7 +1151,7 @@ public class JSON {
 
 
 	  public JSON getInnerJSON(String key) {
-		Object object = this.get(key);
+		Object object = this.innerGet(key);
 		if (object instanceof JSON) {
 		  return (JSON)object;
 		}
@@ -1166,7 +1248,7 @@ public class JSON {
 	   *  the value is the JSONObject.NULL object.
 	   */
 	  protected boolean isNull(String key) {
-	    return /*JSONObject.*/NULL.equals(this.opt(key));
+	    return /*JSONObject.*/NULL.equals(this.innerOpt(key));
 	  }
 
 
@@ -1250,7 +1332,7 @@ public class JSON {
 	   * @param key   A key string.
 	   * @return      An object which is the value, or null if there is no value.
 	   */
-	  private Object opt(String key) {
+	  private Object innerOpt(String key) {
 	    return key == null ? null : this.map.get(key);
 	  }
 
@@ -1489,7 +1571,7 @@ public class JSON {
 
 
 	  public JSONObject setInnerString(String key, String value) {
-	    return put(key, value);
+	    return innerPut(key, value);
 	  }
 
 
@@ -1502,7 +1584,7 @@ public class JSON {
 	   * @throws JSONException If the key is null.
 	   */
 	  public JSONObject setInnerInt(String key, int value) {
-	    this.put(key, new Integer(value));
+	    this.innerPut(key, new Integer(value));
 	    return this;
 	  }
 
@@ -1516,13 +1598,13 @@ public class JSON {
 	   * @throws JSONException If the key is null.
 	   */
 	  public JSONObject setInnerLong(String key, long value) {
-	    this.put(key, new Long(value));
+	    this.innerPut(key, new Long(value));
 	    return this;
 	  }
 
 
 	  public JSONObject setInnerFloat(String key, float value) {
-	    this.put(key, new Double(value));
+	    this.innerPut(key, new Double(value));
 	    return this;
 	  }
 
@@ -1536,7 +1618,7 @@ public class JSON {
 	   * @throws JSONException If the key is null or if the number is invalid.
 	   */
 	  public JSONObject setInnerDouble(String key, double value) {
-	    this.put(key, new Double(value));
+	    this.innerPut(key, new Double(value));
 	    return this;
 	  }
 
@@ -1550,23 +1632,23 @@ public class JSON {
 	   * @throws JSONException If the key is null.
 	   */
 	  public JSONObject setInnerBoolean(String key, boolean value) {
-	    this.put(key, value ? Boolean.TRUE : Boolean.FALSE);
+	    this.innerPut(key, value ? Boolean.TRUE : Boolean.FALSE);
 	    return this;
 	  }
 
 
 	  public JSONObject setInnerObject(String key, JSONObject/*String*/ value) {
-	    return put(key, value);
+	    return innerPut(key, value);
 	  }
 
 
 	  public JSONObject setInnerArray(String key, JSONArray/*String*/ value) {
-	    return put(key, value);
+	    return innerPut(key, value);
 	  }
 
 
 	  public JSON setInnerJSON(String key, JSON value) {
-	    return put(key, value);
+	    return innerPut(key, value);
 	  }
 	  
 	//  /**
@@ -1609,7 +1691,7 @@ public class JSON {
 	   * @throws JSONException If the value is non-finite number
 	   *  or if the key is null.
 	   */
-	  private JSONObject put(String key, Object value) {
+	  private JSONObject innerPut(String key, Object value) {
 	    String pooled;
 	    if (key == null) {
 	      throw new RuntimeException("Null key.");
@@ -1644,10 +1726,10 @@ public class JSON {
 	   */
 	  private JSONObject putOnce(String key, Object value) {
 	    if (key != null && value != null) {
-	      if (this.opt(key) != null) {
+	      if (this.innerOpt(key) != null) {
 	        throw new RuntimeException("Duplicate key \"" + key + "\"");
 	      }
-	      this.put(key, value);
+	      this.innerPut(key, value);
 	    }
 	    return this;
 	  }
@@ -2699,7 +2781,7 @@ public class JSON {
 	    if (array.getClass().isArray()) {
 	      int length = Array.getLength(array);
 	      for (int i = 0; i < length; i += 1) {
-	        this.append(JSONObject.wrap(Array.get(array, i)));
+	        this.innerAppend(JSONObject.wrap(Array.get(array, i)));
 	      }
 	    } else {
 	      throw new RuntimeException("JSONArray initial value should be a string or collection or array.");
@@ -2713,7 +2795,7 @@ public class JSON {
 	   * @return      An object value, or null if there is no
 	   *              object at that index.
 	   */
-	  private Object opt(int index) {
+	  private Object innerOpt(int index) {
 	    if (index < 0 || index >= this.size()) {
 	      return null;
 	    }
@@ -2727,8 +2809,8 @@ public class JSON {
 	   * @return An object value.
 	   * @throws JSONException If there is no value for the index.
 	   */
-	  private Object get(int index) {
-	    Object object = opt(index);
+	  protected Object innerGet(int index) {
+	    Object object = innerOpt(index);
 	    if (object == null) {
 	      throw new RuntimeException("JSONArray[" + index + "] not found.");
 	    }
@@ -2743,7 +2825,7 @@ public class JSON {
 	   * @throws JSONException If there is no string value for the index.
 	   */
 	  public String getInnerString(int index) {
-	    Object object = this.get(index);
+	    Object object = this.innerGet(index);
 	    if (object instanceof String) {
 	      return (String)object;
 	    }
@@ -2759,7 +2841,7 @@ public class JSON {
 	   * @throws   JSONException If the key is not found or if the value is not a number.
 	   */
 	  public int getInnerInt(int index) {
-	    Object object = this.get(index);
+	    Object object = this.innerGet(index);
 	    try {
 	      return object instanceof Number
 	        ? ((Number)object).intValue()
@@ -2779,7 +2861,7 @@ public class JSON {
 	   *  be converted to a number.
 	   */
 	  public long getInnerLong(int index) {
-	    Object object = this.get(index);
+	    Object object = this.innerGet(index);
 	    try {
 	      return object instanceof Number
 	        ? ((Number)object).longValue()
@@ -2808,7 +2890,7 @@ public class JSON {
 	   *  be converted to a number.
 	   */
 	  public double getInnerDouble(int index) {
-	    Object object = this.get(index);
+	    Object object = this.innerGet(index);
 	    try {
 	      return object instanceof Number
 	        ? ((Number)object).doubleValue()
@@ -2829,7 +2911,7 @@ public class JSON {
 	   *  value is not convertible to boolean.
 	   */
 	  public boolean getInnerBoolean(int index) {
-	    Object object = this.get(index);
+	    Object object = this.innerGet(index);
 	    if (object.equals(Boolean.FALSE) ||
 	      (object instanceof String &&
 	        ((String)object).equalsIgnoreCase("false"))) {
@@ -2851,7 +2933,7 @@ public class JSON {
 	   * value is not a JSONArray
 	   */
 	  public JSONArray getInnerArray(int index) {
-	    Object object = this.get(index);
+	    Object object = this.innerGet(index);
 	    if (object instanceof JSONArray) {
 	      return (JSONArray)object;
 	    }
@@ -2867,7 +2949,7 @@ public class JSON {
 	   * value is not a JSONObject
 	   */
 	  public JSONObject getInnerObject(int index) {
-	    Object object = this.get(index);
+	    Object object = this.innerGet(index);
 	    if (object instanceof JSONObject) {
 	      return (JSONObject)object;
 	    }
@@ -2875,7 +2957,7 @@ public class JSON {
 	  }
 
 	  public JSON getInnerJSON(int index) {
-		Object object = this.get(index);
+		Object object = this.innerGet(index);
 		if (object instanceof JSON) {
 		  return (JSON)object;
 		}
@@ -3181,7 +3263,7 @@ public class JSON {
 	   *  JSONObject.NULL object.
 	   * @return this.
 	   */
-	  protected JSONArray append(Object value) {
+	  protected JSONArray innerAppend(Object value) {
 	    myArrayList.add(value);
 	    return this;
 	  }
@@ -3336,9 +3418,9 @@ public class JSON {
 	      this.myArrayList.set(index, value);
 	    } else {
 	      while (index != this.size()) {
-	        this.append(JSON/*Object*/.NULL);
+	        this.innerAppend(JSON/*Object*/.NULL);
 	      }
-	      this.append(value);
+	      this.innerAppend(value);
 	    }
 	    return this;
 	  }
@@ -3361,7 +3443,7 @@ public class JSON {
 	   */
 	  // TODO not sure on this one
 	  protected boolean isNull(int index) {
-	    return JSON/*Object*/.NULL.equals(this.opt(index));
+	    return JSON/*Object*/.NULL.equals(this.innerOpt(index));
 	  }
 
 
@@ -3372,7 +3454,7 @@ public class JSON {
 	   * or null if there was no value.
 	   */
 	  public Object removeIndex(int index) {
-	    Object o = this.opt(index);
+	    Object o = this.innerOpt(index);
 	    this.myArrayList.remove(index);
 	    return o;
 	  }

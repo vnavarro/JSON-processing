@@ -40,11 +40,11 @@ public class XMLTokener extends JSONTokener {
 
    static {
        entity = new java.util.HashMap(8);
-       entity.put("amp",  XML.AMP);
-       entity.put("apos", XML.APOS);
-       entity.put("gt",   XML.GT);
-       entity.put("lt",   XML.LT);
-       entity.put("quot", XML.QUOT);
+       entity.put("amp",  JSONXML.AMP);
+       entity.put("apos", JSONXML.APOS);
+       entity.put("gt",   JSONXML.GT);
+       entity.put("lt",   JSONXML.LT);
+       entity.put("quot", JSONXML.QUOT);
    }
 
     /**
@@ -99,7 +99,7 @@ public class XMLTokener extends JSONTokener {
             return null;
         }
         if (c == '<') {
-            return XML.LT;
+            return JSONXML.LT;
         }
         sb = new StringBuffer();
         for (;;) {
@@ -161,17 +161,17 @@ public class XMLTokener extends JSONTokener {
         case 0:
 //            throw syntaxError("Misshaped meta tag");
         case '<':
-            return XML.LT;
+            return JSONXML.LT;
         case '>':
-            return XML.GT;
+            return JSONXML.GT;
         case '/':
-            return XML.SLASH;
+            return JSONXML.SLASH;
         case '=':
-            return XML.EQ;
+            return JSONXML.EQ;
         case '!':
-            return XML.BANG;
+            return JSONXML.BANG;
         case '?':
-            return XML.QUEST;
+            return JSONXML.QUEST;
         case '"':
         case '\'':
             q = c;
@@ -229,15 +229,15 @@ public class XMLTokener extends JSONTokener {
         case '<':
 //            throw syntaxError("Misplaced '<'");
         case '>':
-            return XML.GT;
+            return JSONXML.GT;
         case '/':
-            return XML.SLASH;
+            return JSONXML.SLASH;
         case '=':
-            return XML.EQ;
+            return JSONXML.EQ;
         case '!':
-            return XML.BANG;
+            return JSONXML.BANG;
         case '?':
-            return XML.QUEST;
+            return JSONXML.QUEST;
 
 // Quoted string
 
