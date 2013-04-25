@@ -4,7 +4,7 @@ This library is simply a fork of the original JSON for [Java library written by 
 
 # Since Processing 2.0 beta 8
 
-Since the beta release (8) of Processing 2.0 (February 24) JSON is part of the core libraries; to avoid any ambiguity problems you should upgrade to [version 0.1.6](http://santiclaws.se/json4processing/json4processing-0.1.6.zip) of this library.
+Since the beta release (8) of Processing 2.0 (February 24) JSON is part of the core libraries; to avoid any ambiguity problems you should upgrade to [the latest](http://santiclaws.se/json4processing/json4processing-0.1.7.zip) version of this library.
 
 # Installation in Processing
 
