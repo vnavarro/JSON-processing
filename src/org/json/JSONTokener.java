@@ -362,10 +362,10 @@ public class JSONTokener {
       return this.nextString(c);
     case '{':
       this.back();
-      return new JSONObject(this);
+      return new JSONObj(this);
     case '[':
       this.back();
-      return new JSONArray(this);
+      return new JSONArr(this);
     }
 
     /*

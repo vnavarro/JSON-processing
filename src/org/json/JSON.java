@@ -38,7 +38,9 @@ public class JSON {
 	 */
 	protected enum JSONType {
 		OBJECT, ARRAY, NULL
-	};
+	}
+
+	public static JSON Null;;
 	
 	protected JSONType type;
 	
@@ -359,9 +361,9 @@ public class JSON {
 	
 	//JSONArray methods
 	
-	public String getString(int index){
+	public String getString(int index) throws JSONException{
 		if( type != JSONType.ARRAY ){
-		     throw new RuntimeException("Not a JSONArray, try using getString(String) instead.");
+		     throw new JSONException("Not a JSONArray, try using getString(String) instead.");
 		}else{
 			return arr.getInnerString(index);
 		}
@@ -375,9 +377,9 @@ public class JSON {
 		}
 	}
 	
-	public int getInt(int index){
+	public int getInt(int index) throws JSONException{
 		if( type != JSONType.ARRAY ){
-		     throw new RuntimeException("Not a JSONArray, try using getInt(String) instead.");
+		     throw new JSONException("Not a JSONArray, try using getInt(String) instead.");
 		}else{
 			return arr.getInnerInt(index);
 		}
@@ -407,9 +409,9 @@ public class JSON {
 		}
 	}
 	
-	public double getDouble(int index){
+	public double getDouble(int index) throws JSONException{
 		if( type != JSONType.ARRAY ){
-		     throw new RuntimeException("Not a JSONArray, try using getDouble(String) instead.");
+		     throw new JSONException("Not a JSONArray, try using getDouble(String) instead.");
 		}else{
 			return arr.getInnerDouble(index);
 		}
@@ -423,9 +425,9 @@ public class JSON {
 		}
 	}
 	
-	public boolean getBoolean(int index){
+	public boolean getBoolean(int index) throws JSONException{
 		if( type != JSONType.ARRAY ){
-		     throw new RuntimeException("Not a JSONArray, try using getBoolean(String) instead.");
+		     throw new JSONException("Not a JSONArray, try using getBoolean(String) instead.");
 		}else{
 			return arr.getInnerBoolean(index);
 		}
@@ -928,16 +930,22 @@ public class JSON {
 	   *  or if the key is null.
 	   */
 	  public JSON/*Object*/ accumulate( String key, Object value ) /*throws JSONException*/ {
-	    testValidity(value);
-	    Object object = this.opt(key);
-	    if (object == null) {
-	      this.put(key, value instanceof JSONArray ? new JSONArray().innerAppend/*put*/(value) : value);
-	    } else if (object instanceof JSONArray) {
-	      ((JSONArray)object).innerAppend/*put*/(value);
-	    } else {
-	      this.put(key, new JSONArray().innerAppend/*put*/(object).innerAppend/*put*/(value));
-	    }
-	    return this;
+	    try {
+			testValidity(value);
+		    Object object = this.opt(key);
+		    if (object == null) {
+		      this.put(key, value instanceof JSONArray ? new JSONArray().innerAppend/*put*/(value) : value);
+		    } else if (object instanceof JSONArray) {
+		      ((JSONArray)object).innerAppend/*put*/(value);
+		    } else {
+		      this.put(key, new JSONArray().innerAppend/*put*/(object).innerAppend/*put*/(value));
+		    }
+		    return this;
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return JSON.Null;
+		}
 	  }
 
 
@@ -1309,21 +1317,26 @@ public class JSON {
 	    if (number == null) {
 	      throw new RuntimeException("Null pointer");
 	    }
-	    testValidity(number);
-
-	    // Shave off trailing zeros and decimal point, if possible.
-
-	    String string = number.toString();
-	    if (string.indexOf('.') > 0 && string.indexOf('e') < 0 &&
-	      string.indexOf('E') < 0) {
-	      while (string.endsWith("0")) {
-	        string = string.substring(0, string.length() - 1);
-	      }
-	      if (string.endsWith(".")) {
-	        string = string.substring(0, string.length() - 1);
-	      }
-	    }
-	    return string;
+	    try {
+			testValidity(number);
+		    // Shave off trailing zeros and decimal point, if possible.
+	
+		    String string = number.toString();
+		    if (string.indexOf('.') > 0 && string.indexOf('e') < 0 &&
+		      string.indexOf('E') < 0) {
+		      while (string.endsWith("0")) {
+		        string = string.substring(0, string.length() - 1);
+		      }
+		      if (string.endsWith(".")) {
+		        string = string.substring(0, string.length() - 1);
+		      }
+		    }
+		    return string;
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
 	  }
 
 
@@ -1697,17 +1710,23 @@ public class JSON {
 	      throw new RuntimeException("Null key.");
 	    }
 	    if (value != null) {
-	      testValidity(value);
-	      pooled = (String)keyPool.get(key);
-	      if (pooled == null) {
-	        if (keyPool.size() >= keyPoolSize) {
-	          keyPool = new HashMap<String, Object>(keyPoolSize);
-	        }
-	        keyPool.put(key, key);
-	      } else {
-	        key = pooled;
-	      }
-	      this.map.put(key, value);
+	      try {
+			testValidity(value);		
+		      pooled = (String)keyPool.get(key);
+		      if (pooled == null) {
+		        if (keyPool.size() >= keyPoolSize) {
+		          keyPool = new HashMap<String, Object>(keyPoolSize);
+		        }
+		        keyPool.put(key, key);
+		      } else {
+		        key = pooled;
+		      }
+		      this.map.put(key, value);
+	      	} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				this.remove(key);
+			}
 	    } else {
 	      this.remove(key);
 	    }
@@ -1902,17 +1921,17 @@ public class JSON {
 	   * @param o The object to test.
 	   * @throws JSONException If o is a non-finite number.
 	   */
-	  static protected void testValidity(Object o) {
+	  static protected void testValidity(Object o) throws JSONException {
 	    if (o != null) {
 	      if (o instanceof Double) {
 	        if (((Double)o).isInfinite() || ((Double)o).isNaN()) {
-	          throw new RuntimeException(
-	            "JSON does not allow non-finite numbers.");
-	        }
+	        	throw new JSONException(
+						"JSON does not allow non-finite numbers.");
+			}
 	      } else if (o instanceof Float) {
 	        if (((Float)o).isInfinite() || ((Float)o).isNaN()) {
-	          throw new RuntimeException(
-	            "JSON does not allow non-finite numbers.");
+	        	throw new JSONException(
+						"JSON does not allow non-finite numbers.");
 	        }
 	      }
 	    }
@@ -3186,8 +3205,13 @@ public class JSON {
 	   */
 	  public JSONArray innerAppend(double value) {
 	    Double d = new Double(value);
-	    JSONObject.testValidity(d);
-	    this.append(d);
+	    try {
+			JSONObject.testValidity(d);		
+		    this.append(d);		    
+	    } catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();			
+		}
 	    return this;
 	  }
 
@@ -3410,19 +3434,25 @@ public class JSON {
 	   *  an invalid number.
 	   */
 	  private JSONArray set(int index, Object value) {
-	    JSONObject.testValidity(value);
-	    if (index < 0) {
-	      throw new RuntimeException("JSONArray[" + index + "] not found.");
-	    }
-	    if (index < this.size()) {
-	      this.myArrayList.set(index, value);
-	    } else {
-	      while (index != this.size()) {
-	        this.innerAppend(JSON/*Object*/.NULL);
-	      }
-	      this.innerAppend(value);
-	    }
-	    return this;
+	    try {
+			JSONObject.testValidity(value);
+		    if (index < 0) {
+		      throw new RuntimeException("JSONArray[" + index + "] not found.");
+		    }
+		    if (index < this.size()) {
+		      this.myArrayList.set(index, value);
+		    } else {
+		      while (index != this.size()) {
+		        this.innerAppend(JSON/*Object*/.NULL);
+		      }
+		      this.innerAppend(value);
+		    }
+		    return this;
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
 	  }
 
 
@@ -3588,7 +3618,7 @@ public class JSON {
 	   * @return a string.
 	   * @throws JSONException If the array contains an invalid number.
 	   */
-	  public String join(String separator) {
+	  public String join(String separator) throws JSONException {
 	    int len = this.size();
 	    StringBuffer sb = new StringBuffer();
 

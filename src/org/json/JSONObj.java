@@ -92,7 +92,7 @@ import java.util.ResourceBundle;
  * @author JSON.org
  * @version 2011-10-16
  */
-public class JSONObj {
+public class JSONObj extends JSON.JSONObject{
 
 	/**
 	 * JSONObject.NULL is equivalent to the value that JavaScript calls null,

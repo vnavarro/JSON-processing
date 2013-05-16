@@ -80,7 +80,7 @@ import java.util.Map;
  * @author JSON.org
  * @version 2011-08-25
  */
-public class JSONArr {
+public class JSONArr extends JSON.JSONArray{
 
 
     /**
@@ -101,7 +101,7 @@ public class JSONArr {
      * @param x A JSONTokener
      * @throws JSONException If there is a syntax error.
      */
-    public JSONArr(JSONTokener x) throws JSONException {
+    public JSONArr(JSONTokener x) {
         this();
         if (x.nextClean() != '[') {
 //            throw x.syntaxError("A JSONArray text must start with '['");
